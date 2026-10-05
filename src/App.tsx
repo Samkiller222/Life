@@ -18,6 +18,11 @@ import Import from './pages/money/Import'
 import Transactions from './pages/money/Transactions'
 import Budgets from './pages/money/Budgets'
 import Savings from './pages/money/Savings'
+import AdminLayout from './pages/admin/AdminLayout'
+import Todos from './pages/admin/Todos'
+import Reading from './pages/admin/Reading'
+import Trips from './pages/admin/Trips'
+import TripDetail from './pages/admin/TripDetail'
 import { modules } from './modules'
 
 export default function App() {
@@ -46,6 +51,12 @@ export default function App() {
             <Route path="transactions" element={<Transactions />} />
             <Route path="budgets" element={<Budgets />} />
             <Route path="savings" element={<Savings />} />
+          </Route>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Todos />} />
+            <Route path="reading" element={<Reading />} />
+            <Route path="trips" element={<Trips />} />
+            <Route path="trips/:id" element={<TripDetail />} />
           </Route>
           {modules
             .filter((m) => !m.built)

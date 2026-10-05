@@ -39,7 +39,7 @@ export const modules: Module[] = [
     name: 'Life admin',
     summary: 'To-dos with deadlines, a reading list, and trip planning with checklists and budgets.',
     doneWhen: 'It replaces whatever notes app you use now for these.',
-    built: false,
+    built: true,
     ready: false,
   },
   {
