@@ -755,6 +755,149 @@ input[type='checkbox'] {
   text-transform: uppercase;
 }
 
+/* Training */
+
+.totals {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: var(--space-4);
+  margin: 0 0 var(--space-5);
+}
+
+.totals dt {
+  font-family: var(--font-data);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.totals dd {
+  margin: 2px 0 0;
+  font-family: var(--font-data);
+  font-size: var(--fs-panel-title);
+  font-weight: 600;
+}
+
+.day-list,
+.session-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.day-list li {
+  display: flex;
+  gap: var(--space-4);
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+
+.day-list li.today .day-label {
+  color: var(--accent);
+}
+
+.day-label {
+  flex: none;
+  width: 64px;
+  padding-top: 3px;
+  font-family: var(--font-data);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+  color: var(--muted);
+}
+
+.day-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.session {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  padding: 6px 8px;
+  margin: -6px -8px;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.session:hover {
+  background: var(--surface-alt);
+  color: var(--text);
+}
+
+.session .muted {
+  font-size: var(--fs-small);
+}
+
+.session-list li {
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+
+.session-list li:first-child,
+.day-list li:first-child {
+  border-top: none;
+}
+
+.exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.exercise {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+  padding: var(--space-4) 0 0;
+  min-width: 0;
+}
+
+.exercise:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.hint {
+  margin-top: 6px;
+  font-family: var(--font-data);
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+.sets {
+  border-collapse: collapse;
+  margin: var(--space-2) 0;
+}
+
+.sets th {
+  font-family: var(--font-data);
+  font-size: var(--fs-label);
+  font-weight: 400;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+  padding: 4px 8px 4px 0;
+}
+
+.sets td {
+  padding: 3px 8px 3px 0;
+  font-family: var(--font-data);
+}
+
+.sets .input {
+  width: 80px;
+}
+
 /* Small screens */
 
 @media (max-width: 700px) {
