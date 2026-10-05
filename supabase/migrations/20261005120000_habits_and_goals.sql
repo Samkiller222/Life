@@ -43,7 +43,9 @@ create table public.goal_updates (
 create index habits_user_idx on public.habits (user_id);
 create index habit_checkins_user_date_idx on public.habit_checkins (user_id, date);
 create index goals_user_idx on public.goals (user_id);
+create index habit_checkins_habit_idx on public.habit_checkins (habit_id);
 create index goal_updates_goal_idx on public.goal_updates (goal_id);
+create index goal_updates_user_idx on public.goal_updates (user_id);
 
 alter table public.habits enable row level security;
 alter table public.habit_checkins enable row level security;
@@ -51,21 +53,26 @@ alter table public.goals enable row level security;
 alter table public.goal_updates enable row level security;
 
 create policy "Own habits" on public.habits
-  for all using (user_id = auth.uid()) with check (user_id = auth.uid());
+  for all to authenticated
+  using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
 create policy "Own habit check-ins" on public.habit_checkins
-  for all using (user_id = auth.uid()) with check (user_id = auth.uid());
+  for all to authenticated
+  using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
 create policy "Own goals" on public.goals
-  for all using (user_id = auth.uid()) with check (user_id = auth.uid());
+  for all to authenticated
+  using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
 create policy "Own goal updates" on public.goal_updates
-  for all using (user_id = auth.uid()) with check (user_id = auth.uid());
+  for all to authenticated
+  using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
 
 -- Logging progress adds to the goal's running total in one step.
 create function public.log_goal_progress(p_goal_id uuid, p_value numeric, p_note text default '')
 returns void
 language sql
 security invoker
+set search_path = ''
 as $$
   insert into public.goal_updates (goal_id, value, note) values (p_goal_id, p_value, p_note);
   update public.goals set current_value = current_value + p_value
-    where id = p_goal_id and user_id = auth.uid();
+    where id = p_goal_id and user_id = (select auth.uid());
 $$;

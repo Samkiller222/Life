@@ -25,6 +25,7 @@ Module metadata (name, summary, "Done when", `ready` flag) lives in `src/modules
 
 Current status: Phase 1 (habits and goals) is built and awaiting its "Done when" check. Phases 2 to 5 are placeholders.
 Phase 1 lives in `src/pages/habits/`, `src/hooks/`, `src/lib/streak.ts` and `supabase/migrations/20261005120000_habits_and_goals.sql`.
+The migration is applied to Supabase project `dhpxlmksyctpafcfdpit` ("Samkiller222's Project", shared with other apps, so keep table names module-specific).
 
 ## How we work
 
