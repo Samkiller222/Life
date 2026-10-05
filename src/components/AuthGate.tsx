@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
-import { supabase } from '../lib/supabase'
+import { supabase, supabaseError } from '../lib/supabase'
 import { Panel } from './Panel'
 
 /** Shows a magic-link sign-in form until there's a Supabase session. */
@@ -25,8 +25,12 @@ export default function AuthGate({ children }: { children: ReactNode }) {
     return (
       <Panel title="Connect Supabase" meta={<span className="badge warn">Setup</span>}>
         <p>
-          Supabase isn't connected yet. Copy <code>.env.example</code> to <code>.env.local</code> and add your project
-          URL and anon key.
+          {supabaseError || (
+            <>
+              Supabase isn't connected yet. Copy <code>.env.example</code> to <code>.env.local</code> and add your
+              project URL and anon key.
+            </>
+          )}
         </p>
       </Panel>
     )

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { modules } from '../modules'
-import { supabase } from '../lib/supabase'
+import { supabase, supabaseError } from '../lib/supabase'
 import { Panel } from '../components/Panel'
 
 function statusBadge(built: boolean, ready: boolean) {
@@ -16,8 +16,12 @@ export default function Home() {
       {!supabase && (
         <Panel title="Connect Supabase" meta={<span className="badge warn">Setup</span>}>
           <p>
-            Copy <code>.env.example</code> to <code>.env.local</code> and add your project URL and anon key. The README
-            has the full steps.
+            {supabaseError || (
+              <>
+                Copy <code>.env.example</code> to <code>.env.local</code> (or add the same variables in your host's
+                settings) with your project URL and anon key. The README has the full steps.
+              </>
+            )}
           </p>
         </Panel>
       )}
