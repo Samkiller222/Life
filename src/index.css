@@ -1205,3 +1205,34 @@ a.tag:hover {
 a.link-btn {
   text-decoration: none;
 }
+
+/* Weekly review */
+
+.review-summary {
+  font-family: var(--font-display);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+}
+
+.review-label {
+  margin: var(--space-5) 0 var(--space-2);
+  font-family: var(--font-data);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.review-list {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.review-list li {
+  margin: 4px 0;
+}
+
+.review-list .link-btn[aria-current='true'] {
+  font-weight: 600;
+}

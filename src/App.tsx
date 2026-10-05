@@ -23,6 +23,7 @@ import Todos from './pages/admin/Todos'
 import Reading from './pages/admin/Reading'
 import Trips from './pages/admin/Trips'
 import TripDetail from './pages/admin/TripDetail'
+import Review from './pages/review/Review'
 import { modules } from './modules'
 
 export default function App() {
@@ -58,6 +59,7 @@ export default function App() {
             <Route path="trips" element={<Trips />} />
             <Route path="trips/:id" element={<TripDetail />} />
           </Route>
+          <Route path="/review" element={<Review />} />
           {modules
             .filter((m) => !m.built)
             .map((m) => (

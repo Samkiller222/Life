@@ -47,7 +47,7 @@ export const modules: Module[] = [
     name: 'Smart layer',
     summary: "A weekly AI review that summarises your week, spots patterns and suggests next week's focus.",
     doneWhen: 'It gives a useful weekly summary across the other modules.',
-    built: false,
+    built: true,
     ready: false,
   },
 ]
