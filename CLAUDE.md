@@ -23,7 +23,8 @@ Module metadata (name, summary, "Done when", `ready` flag) lives in `src/modules
 4. **Life admin**: to-dos with deadlines, a reading list, trip planning with checklists and budgets. Done when: it replaces the current notes app for these.
 5. **Smart layer**: a weekly AI review that summarises the week, spots patterns across modules, and suggests next week's focus.
 
-Current status: app shell only (navigation, placeholder page per module). Phase 1 is next.
+Current status: Phase 1 (habits and goals) is built and awaiting its "Done when" check. Phases 2 to 5 are placeholders.
+Phase 1 lives in `src/pages/habits/`, `src/hooks/`, `src/lib/streak.ts` and `supabase/migrations/20261005120000_habits_and_goals.sql`.
 
 ## How we work
 
@@ -38,7 +39,7 @@ Current status: app shell only (navigation, placeholder page per module). Phase 
 - Function components and hooks only. Keep components small; one module per folder once a module grows past a page or two (`src/pages/habits/...`).
 - Database changes are SQL files in `supabase/migrations/`, named `YYYYMMDDHHMMSS_description.sql`. Every table has `user_id uuid references auth.users` and row-level security so each user sees only their own rows.
 - Styling is plain CSS in `src/index.css` using the CSS variables at the top (light and dark mode).
-- Before committing: `npm run lint` and `npm run build` must both pass.
+- Before committing: `npm run lint`, `npm test` and `npm run build` must all pass.
 
 ## Commands
 
@@ -46,3 +47,4 @@ Current status: app shell only (navigation, placeholder page per module). Phase 
 - `npm run dev`: run locally at http://localhost:5173
 - `npm run build`: type-check and build
 - `npm run lint`: lint with oxlint
+- `npm test`: unit tests with Vitest

@@ -141,3 +141,224 @@ body {
     padding: 16px;
   }
 }
+
+/* Shared controls */
+
+h1 {
+  margin-top: 0;
+}
+
+input,
+button {
+  font: inherit;
+  color: inherit;
+}
+
+input:not([type='checkbox']) {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  min-width: 0;
+}
+
+input.short {
+  width: 110px;
+}
+
+button {
+  padding: 8px 14px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+button.link {
+  padding: 4px 6px;
+  border: none;
+  background: none;
+  color: var(--accent);
+}
+
+button.danger {
+  color: #d64545;
+}
+
+input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.row.wrap {
+  flex-wrap: wrap;
+}
+
+.row.spread {
+  justify-content: space-between;
+}
+
+.row h2 {
+  margin: 0;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.error {
+  color: #d64545;
+}
+
+.panel {
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.panel.narrow {
+  max-width: 420px;
+}
+
+.badge.built {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Habits */
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tabs a {
+  padding: 8px 12px;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+.tabs a.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.checklist,
+.habit-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+
+.checklist li,
+.habit-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+
+.checklist label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.checklist label.done {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.habit-list li.archived {
+  opacity: 0.6;
+}
+
+.days {
+  display: flex;
+  gap: 4px;
+}
+
+button.day {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  border-color: var(--border);
+  background: var(--bg);
+  color: var(--muted);
+}
+
+button.day.on {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table.week {
+  width: 100%;
+  margin-top: 12px;
+  border-collapse: collapse;
+}
+
+table.week th,
+table.week td {
+  padding: 8px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+
+table.week tbody th {
+  text-align: left;
+  font-weight: 500;
+}
+
+table.week th.today {
+  color: var(--accent);
+}
+
+/* Goals */
+
+.progress {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.progress div {
+  height: 100%;
+  background: var(--ok);
+}
+
+.card form input {
+  flex: 1;
+}

@@ -1,6 +1,6 @@
 # Phase 1 plan: Habits and goals
 
-Proposed plan, not built yet. Approve or change it before any Phase 1 code is written.
+Approved and built on 2026-10-05. Remaining: the one-week "Done when" check.
 
 ## Login
 

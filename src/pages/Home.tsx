@@ -18,7 +18,9 @@ export default function Home() {
             <span className="phase">Phase {i + 1}</span>
             <h2>{m.name}</h2>
             <p>{m.summary}</p>
-            <span className={m.ready ? 'badge ready' : 'badge'}>{m.ready ? 'Ready' : 'Not built yet'}</span>
+            <span className={m.ready ? 'badge ready' : m.built ? 'badge built' : 'badge'}>
+              {m.ready ? 'Done' : m.built ? 'Built, testing' : 'Not built yet'}
+            </span>
           </Link>
         ))}
       </div>
