@@ -7,7 +7,7 @@ One personal web app that tracks habits, training, money and life admin, built u
 - React 19 + TypeScript, built with Vite
 - React Router for pages
 - Supabase for the database and logins (`src/lib/supabase.ts`)
-- Hosted on Vercel (`vercel.json` sends every route to the SPA)
+- Hosted on GitHub Pages at https://samkiller222.github.io/Life/, built and deployed by `.github/workflows/deploy.yml` (base path `/Life/` via `BASE_PATH`). `vercel.json` is kept in case it moves to Vercel.
 - Code on GitHub: `Samkiller222/Life`
 
 Same stack as the planned swim training platform, so there is only one setup to learn.

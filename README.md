@@ -12,8 +12,14 @@ A personal dashboard for habits, training, money and life admin. React + Supabas
 
 The app runs without Supabase keys; it shows a notice until they're added.
 
-## Deploy
+## Deploy (GitHub Pages)
 
-Import the repo in Vercel, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` as environment variables, and deploy. Vercel detects Vite automatically.
+The site is published at https://samkiller222.github.io/Life/ by `.github/workflows/deploy.yml`, which builds the app on every push.
+
+One-time setup:
+
+1. Settings, Pages, Source: choose **GitHub Actions**.
+2. Settings, Secrets and variables, Actions: add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+3. In Supabase, Authentication, URL Configuration, add `https://samkiller222.github.io/Life/` to the redirect URLs.
 
 See `CLAUDE.md` for the build plan and conventions.
