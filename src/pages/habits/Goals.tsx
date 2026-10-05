@@ -1,12 +1,21 @@
 import { useState, type FormEvent } from 'react'
 import { useGoals } from '../../hooks/useGoals'
 import { daysBetween, parseISODate, today } from '../../lib/dates'
+import { EmptyState, Panel } from '../../components/Panel'
 import type { Goal } from '../../types'
 
-function GoalCard({ goal, onLog, onRemove }: { goal: Goal; onLog: (v: number) => void; onRemove: () => void }) {
+function dueText(targetDate: string) {
+  const left = daysBetween(today(), targetDate)
+  const date = parseISODate(targetDate).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })
+  if (left > 0) return `${date} · ${left} day${left === 1 ? '' : 's'} left`
+  if (left === 0) return `${date} · due today`
+  return `${date} · ${-left} day${left === -1 ? '' : 's'} overdue`
+}
+
+function GoalPanel({ goal, onLog, onRemove }: { goal: Goal; onLog: (v: number) => void; onRemove: () => void }) {
   const [value, setValue] = useState('')
   const pct = Math.min(100, Math.round((goal.current_value / goal.target_value) * 100))
-  const daysLeft = goal.target_date ? daysBetween(today(), goal.target_date) : null
+  const overdue = goal.target_date && pct < 100 && daysBetween(today(), goal.target_date) < 0
 
   function submit(e: FormEvent) {
     e.preventDefault()
@@ -17,31 +26,26 @@ function GoalCard({ goal, onLog, onRemove }: { goal: Goal; onLog: (v: number) =>
   }
 
   return (
-    <div className="card">
-      <div className="row spread">
-        <h2>{goal.title}</h2>
-        <button className="link danger" onClick={() => confirm(`Delete "${goal.title}"?`) && onRemove()}>
+    <Panel title={goal.title} meta={<span className={pct >= 100 ? 'badge ok' : overdue ? 'badge err' : 'badge'}>{pct >= 100 ? 'Reached' : overdue ? 'Overdue' : `${pct}%`}</span>}>
+      <div className="stat-head">
+        <span className="stat-count">
+          {goal.current_value} of {goal.target_value} {goal.unit}
+        </span>
+        {goal.target_date && <span className="stat-count">{dueText(goal.target_date)}</span>}
+      </div>
+      <div className="stat-track" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
+        <div className={pct >= 100 ? 'stat-fill done' : 'stat-fill'} style={{ width: `${pct}%` }} />
+      </div>
+      <form className="actions" onSubmit={submit}>
+        <input className="input" style={{ flex: '1 1 120px', width: 'auto' }} type="number" step="any" placeholder={`+ ${goal.unit || 'amount'}`} value={value} onChange={(e) => setValue(e.target.value)} aria-label="Progress to add" />
+        <button type="submit" className="btn sm">
+          Log progress
+        </button>
+        <button type="button" className="link-btn danger" onClick={() => confirm(`Delete "${goal.title}"?`) && onRemove()}>
           Delete
         </button>
-      </div>
-      <div className="progress" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
-        <div style={{ width: `${pct}%` }} />
-      </div>
-      <p>
-        {goal.current_value} of {goal.target_value} {goal.unit} ({pct}%)
-      </p>
-      {goal.target_date && (
-        <p className="muted">
-          {parseISODate(goal.target_date).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}
-          {' · '}
-          {daysLeft! > 0 ? `${daysLeft} days left` : daysLeft === 0 ? 'due today' : `${-daysLeft!} days overdue`}
-        </p>
-      )}
-      <form className="row" onSubmit={submit}>
-        <input type="number" step="any" placeholder={`+ ${goal.unit || 'amount'}`} value={value} onChange={(e) => setValue(e.target.value)} />
-        <button type="submit">Log</button>
       </form>
-    </div>
+    </Panel>
   )
 }
 
@@ -63,24 +67,54 @@ export default function Goals() {
     setDate('')
   }
 
-  if (loading) return <p className="muted">Loading…</p>
+  if (loading) return <div className="status">Loading…</div>
 
   return (
     <>
-      {error && <p className="error">{error}</p>}
-      <form className="panel row wrap" onSubmit={submit}>
-        <input placeholder="Goal, e.g. Read 12 books" value={title} onChange={(e) => setTitle(e.target.value)} />
-        <input type="number" step="any" min="0" placeholder="Target" value={target} onChange={(e) => setTarget(e.target.value)} className="short" />
-        <input placeholder="Unit" value={unit} onChange={(e) => setUnit(e.target.value)} className="short" />
-        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} aria-label="Target date" />
-        <button type="submit" disabled={!title.trim() || !(Number(target) > 0)}>
-          Add goal
-        </button>
-      </form>
-      {goals.length === 0 && <p className="muted">No goals yet.</p>}
-      <div className="cards">
+      {error && <div className="status err">{error}</div>}
+      <div className="grid">
+        <Panel title="Add a goal">
+          <form onSubmit={submit}>
+            <div className="fields-grid">
+              <div className="field prose full">
+                <label className="field-label" htmlFor="goal-title">
+                  Goal
+                </label>
+                <input id="goal-title" placeholder="Read 12 books" value={title} onChange={(e) => setTitle(e.target.value)} />
+              </div>
+              <div className="field">
+                <label className="field-label" htmlFor="goal-target">
+                  Target
+                </label>
+                <input id="goal-target" type="number" step="any" min="0" placeholder="12" value={target} onChange={(e) => setTarget(e.target.value)} />
+              </div>
+              <div className="field">
+                <label className="field-label" htmlFor="goal-unit">
+                  Unit
+                </label>
+                <input id="goal-unit" placeholder="books" value={unit} onChange={(e) => setUnit(e.target.value)} />
+              </div>
+              <div className="field full">
+                <label className="field-label" htmlFor="goal-date">
+                  Target date
+                </label>
+                <input id="goal-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+              </div>
+            </div>
+            <div className="actions">
+              <button type="submit" className="btn stamp" disabled={!title.trim() || !(Number(target) > 0)}>
+                Add goal
+              </button>
+            </div>
+          </form>
+        </Panel>
+        {goals.length === 0 && (
+          <Panel title="Your goals">
+            <EmptyState>Goals you add will appear here with a progress bar.</EmptyState>
+          </Panel>
+        )}
         {goals.map((g) => (
-          <GoalCard key={g.id} goal={g} onLog={(v) => logProgress(g.id, v)} onRemove={() => remove(g.id)} />
+          <GoalPanel key={g.id} goal={g} onLog={(v) => logProgress(g.id, v)} onRemove={() => remove(g.id)} />
         ))}
       </div>
     </>

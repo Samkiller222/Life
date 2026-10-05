@@ -1,0 +1,101 @@
+/* Design tokens from the Case Register design system (Claude Design handoff). Light by default; dark via data-theme="dark" on <html>. */
+:root{
+  --bg:#EDF0F2;
+  --surface:#FFFFFF;
+  --surface-alt:#F5F7F8;
+  --border:#D7DEE3;
+  --text:#1B2733;
+  --muted:#5C6B78;
+  --header-bg:#1B2733;
+  --header-text:#EDF0F2;
+  --header-muted:#AEB9C4;
+  --stamp:#B23A2F;
+  --stamp-dark:#8C2C22;
+  --stamp-bg:#FBF1EF;
+  --accent:#B23A2F;
+  --accent-dark:#8C2C22;
+  --accent-bg:#FBF1EF;
+  --brass:#A98A4B;
+  --brass-bg:#FBF6EA;
+  --ok:#3A6B52;
+  --ok-bg:#EAF3EE;
+  /* semantic aliases */
+  --surface-page:var(--bg);
+  --surface-card:var(--surface);
+  --surface-input:var(--surface-alt);
+  --text-body:var(--text);
+  --text-muted:var(--muted);
+  --status-error:var(--stamp);
+  --status-warn:var(--brass);
+  --status-ok:var(--ok);
+}
+[data-theme="dark"]{
+  --bg:#10151B;
+  --surface:#171E26;
+  --surface-alt:#1E2731;
+  --border:#2B3742;
+  --text:#E8EDF1;
+  --muted:#93A2AD;
+  --header-bg:#0B0F14;
+  --header-text:#EDF0F2;
+  --header-muted:#8493A0;
+  --stamp:#E2685C;
+  --stamp-dark:#B23A2F;
+  --stamp-bg:rgba(226,104,92,.12);
+  --accent:#E2685C;
+  --accent-dark:#B23A2F;
+  --accent-bg:rgba(226,104,92,.12);
+  --brass:#D3B476;
+  --brass-bg:rgba(211,180,118,.12);
+  --ok:#63B98D;
+  --ok-bg:rgba(99,185,141,.12);
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 24px rgba(0,0,0,.35);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+
+[data-accent="red"]{ --accent:#B23A2F; --accent-dark:#8C2C22; --accent-bg:#FBF1EF; }
+[data-theme="dark"][data-accent="red"]{ --accent:#E2685C; --accent-dark:#B23A2F; --accent-bg:rgba(226,104,92,.12); }
+[data-accent="navy"]{ --accent:#2A4E8C; --accent-dark:#1E3A6B; --accent-bg:#EAF0FA; }
+[data-theme="dark"][data-accent="navy"]{ --accent:#6E9EEB; --accent-dark:#3B5FA3; --accent-bg:rgba(110,158,235,.12); }
+[data-accent="plum"]{ --accent:#7A3B6B; --accent-dark:#5C2B50; --accent-bg:#F6EDF3; }
+[data-theme="dark"][data-accent="plum"]{ --accent:#C97FB5; --accent-dark:#8C4F79; --accent-bg:rgba(201,127,181,.12); }
+[data-accent="teal"]{ --accent:#1F7A72; --accent-dark:#155A54; --accent-bg:#E9F5F3; }
+[data-theme="dark"][data-accent="teal"]{ --accent:#5FC4B8; --accent-dark:#2F8C82; --accent-bg:rgba(95,196,184,.12); }
+[data-accent="charcoal"]{ --accent:#3A4652; --accent-dark:#252E38; --accent-bg:#EEF0F2; }
+[data-theme="dark"][data-accent="charcoal"]{ --accent:#9FB0BD; --accent-dark:#5C6B78; --accent-bg:rgba(159,176,189,.12); }
+
+:root{
+  --font-display:'Source Serif Pro', 'Iowan Old Style', Georgia, serif;
+  --font-body:-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-data:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --fs-title:28px;
+  --fs-panel-title:16px;
+  --fs-body:13.5px;
+  --fs-control:13px;
+  --fs-data:12.5px;
+  --fs-small:11.5px;
+  --fs-label:10.5px;
+  --fs-eyebrow:11px;
+  --ls-eyebrow:.14em;
+  --ls-label:.08em;
+}
+
+:root{
+  --radius-lg:14px;
+  --radius-md:10px;
+  --radius-sm:8px;
+  --radius-pill:999px;
+  --shadow: 0 1px 2px rgba(15,23,32,.05), 0 8px 20px rgba(15,23,32,.06);
+  --shadow-sm: 0 1px 2px rgba(15,23,32,.06);
+  --focus-ring:0 0 0 3px var(--accent-bg);
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:10px;
+  --space-4:14px;
+  --space-5:18px;
+  --space-6:24px;
+  --space-7:28px;
+  --space-8:32px;
+  --content-max:1180px;
+}

@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
+import { Panel } from './Panel'
 
 /** Shows a magic-link sign-in form until there's a Supabase session. */
 export default function AuthGate({ children }: { children: ReactNode }) {
@@ -22,13 +23,15 @@ export default function AuthGate({ children }: { children: ReactNode }) {
 
   if (!supabase) {
     return (
-      <p className="notice">
-        Supabase isn't connected yet. Copy <code>.env.example</code> to <code>.env.local</code> and add your project
-        URL and anon key.
-      </p>
+      <Panel title="Connect Supabase" meta={<span className="badge warn">Setup</span>}>
+        <p>
+          Supabase isn't connected yet. Copy <code>.env.example</code> to <code>.env.local</code> and add your project
+          URL and anon key.
+        </p>
+      </Panel>
     )
   }
-  if (loading) return <p className="muted">Loading…</p>
+  if (loading) return <p className="status">Loading…</p>
   if (session) return <>{children}</>
 
   async function signIn(e: FormEvent) {
@@ -43,17 +46,27 @@ export default function AuthGate({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="panel narrow">
-      <h2>Sign in</h2>
-      {sent ? (
-        <p>Check {email} for a sign-in link.</p>
-      ) : (
-        <form onSubmit={signIn} className="row">
-          <input type="email" required placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <button type="submit">Email me a link</button>
-        </form>
-      )}
-      {error && <p className="error">{error}</p>}
+    <div className="grid">
+      <Panel title="Sign in">
+        {sent ? (
+          <p>Check {email} for a sign-in link. You can close this tab once you've opened it.</p>
+        ) : (
+          <form onSubmit={signIn}>
+            <div className="field">
+              <label className="field-label" htmlFor="email">
+                Email
+              </label>
+              <input id="email" type="email" required placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+            </div>
+            <div className="actions">
+              <button type="submit" className="btn stamp">
+                Email me a link
+              </button>
+            </div>
+          </form>
+        )}
+        <div className={error ? 'status err' : 'status'}>{error}</div>
+      </Panel>
     </div>
   )
 }
@@ -61,7 +74,7 @@ export default function AuthGate({ children }: { children: ReactNode }) {
 export function SignOutButton() {
   if (!supabase) return null
   return (
-    <button className="link" onClick={() => supabase!.auth.signOut()}>
+    <button type="button" className="link-btn" onClick={() => supabase!.auth.signOut()}>
       Sign out
     </button>
   )

@@ -38,7 +38,11 @@ Phase 1 lives in `src/pages/habits/`, `src/hooks/`, `src/lib/streak.ts` and `sup
 - Pages in `src/pages/`, shared components in `src/components/`, helpers in `src/lib/`.
 - Function components and hooks only. Keep components small; one module per folder once a module grows past a page or two (`src/pages/habits/...`).
 - Database changes are SQL files in `supabase/migrations/`, named `YYYYMMDDHHMMSS_description.sql`. Every table has `user_id uuid references auth.users` and row-level security so each user sees only their own rows.
-- Styling is plain CSS in `src/index.css` using the CSS variables at the top (light and dark mode).
+- Styling follows the Case Register design system from Claude Design: tokens (colours, type, radii, spacing) live in `src/styles/tokens.css`, component classes in `src/index.css`. Use the tokens, never raw hex values.
+- Look: dark ink header with a 4px brass rule, serif titles, system sans for UI, monospace for data, labels, tags and badges. One accent (stamp red) for the main action, links and focus. Status colours are fixed: green ok, brass warn, red error.
+- Build screens from `Panel` and `EmptyState` (`src/components/Panel.tsx`). Buttons: `btn` (ink), `btn stamp` (accent, main action), `btn secondary`; `link-btn` for small text actions.
+- Copy is plain and sentence case, with no emoji or exclamation marks. Empty states say what will appear and when.
+- Theme is light or dark via `data-theme` on `<html>`, toggled in the header and saved in localStorage.
 - Before committing: `npm run lint`, `npm test` and `npm run build` must all pass.
 
 ## Commands
