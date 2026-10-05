@@ -21,9 +21,9 @@ export const modules: Module[] = [
   {
     path: '/training',
     name: 'Training hub',
-    summary: 'Log gym sessions and pull in swim data so all training shows in one place.',
+    summary: 'Log gym sessions and swims so a week of training shows in one place.',
     doneWhen: 'A week of swim and gym training shows on one screen.',
-    built: false,
+    built: true,
     ready: false,
   },
   {
