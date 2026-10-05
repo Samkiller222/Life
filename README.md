@@ -19,7 +19,6 @@ The site is published at https://samkiller222.github.io/Life/ by `.github/workfl
 One-time setup:
 
 1. Settings, Pages, Source: choose **GitHub Actions**.
-2. Settings, Secrets and variables, Actions: add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
-3. In Supabase, Authentication, URL Configuration, add `https://samkiller222.github.io/Life/**` to the Redirect URLs. Leave the Site URL alone; the Supabase project is shared with other apps.
+2. In Supabase, Authentication, URL Configuration, add `https://samkiller222.github.io/Life/**` to the Redirect URLs. Leave the Site URL alone; the Supabase project is shared with other apps.
 
 See `CLAUDE.md` for the build plan and conventions.

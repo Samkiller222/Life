@@ -32,7 +32,7 @@ The migration is applied to Supabase project `dhpxlmksyctpafcfdpit` ("Samkiller2
 - One phase per prompt. Propose a short plan (tables, pages, components) and wait for approval before writing code.
 - Check the phase's "Done when" line before moving on, then set `ready: true` in `src/modules.ts`.
 - Commit after every working step so mistakes are easy to roll back.
-- Secrets stay out of the code. Supabase keys go in `.env.local` (git-ignored); `.env.example` lists the variable names only.
+- Secrets stay out of the code. The Supabase URL and publishable key are public, so the deploy workflow sets them directly (Sam's choice, 2026-10-05); locally they go in `.env.local` (git-ignored). Never commit the service-role/secret key.
 
 ## Conventions
 
