@@ -48,3 +48,15 @@ export const ChevronRightIcon = () => (
     <polyline points="9 18 15 12 9 6" />
   </svg>
 )
+
+export const ChevronUpIcon = () => (
+  <svg {...base}>
+    <polyline points="18 15 12 9 6 15" />
+  </svg>
+)
+
+export const ChevronDownIcon = () => (
+  <svg {...base}>
+    <polyline points="6 9 12 15 18 9" />
+  </svg>
+)

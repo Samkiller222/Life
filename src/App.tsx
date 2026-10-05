@@ -12,6 +12,12 @@ import TrainingWeek from './pages/training/Week'
 import LogGym from './pages/training/LogGym'
 import LogSwim from './pages/training/LogSwim'
 import History from './pages/training/History'
+import MoneyLayout from './pages/money/MoneyLayout'
+import Overview from './pages/money/Overview'
+import Import from './pages/money/Import'
+import Transactions from './pages/money/Transactions'
+import Budgets from './pages/money/Budgets'
+import Savings from './pages/money/Savings'
 import { modules } from './modules'
 
 export default function App() {
@@ -33,6 +39,13 @@ export default function App() {
             <Route path="swim" element={<LogSwim />} />
             <Route path="swim/:id" element={<LogSwim />} />
             <Route path="history" element={<History />} />
+          </Route>
+          <Route path="/money" element={<MoneyLayout />}>
+            <Route index element={<Overview />} />
+            <Route path="import" element={<Import />} />
+            <Route path="transactions" element={<Transactions />} />
+            <Route path="budgets" element={<Budgets />} />
+            <Route path="savings" element={<Savings />} />
           </Route>
           {modules
             .filter((m) => !m.built)
