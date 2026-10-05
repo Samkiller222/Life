@@ -107,3 +107,56 @@ export type SavingsGoal = {
   saved_amount: number
   target_date: string | null
 }
+
+export type TodoPriority = 'low' | 'normal' | 'high'
+
+export type Todo = {
+  id: string
+  title: string
+  notes: string
+  due_date: string | null
+  priority: TodoPriority
+  done_at: string | null
+  trip_id: string | null
+  created_at: string
+}
+
+export type BookStatus = 'want' | 'reading' | 'finished'
+
+export type Book = {
+  id: string
+  title: string
+  author: string
+  status: BookStatus
+  started_on: string | null
+  finished_on: string | null
+  rating: number | null
+  notes: string
+  created_at: string
+}
+
+export type Trip = {
+  id: string
+  name: string
+  destination: string
+  start_date: string | null
+  end_date: string | null
+  budget: number | null
+  notes: string
+}
+
+export type TripItem = {
+  id: string
+  trip_id: string
+  title: string
+  done: boolean
+  position: number
+}
+
+export type TripCost = {
+  id: string
+  trip_id: string
+  description: string
+  category: string
+  amount: number
+}

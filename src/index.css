@@ -1083,3 +1083,125 @@ input[type='checkbox'] {
 .rule-list li:first-child {
   border-top: none;
 }
+
+/* Life admin */
+
+.checklist li.editing {
+  display: block;
+}
+
+.todo-main,
+.book-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1 1 220px;
+}
+
+.todo-main label {
+  overflow-wrap: anywhere;
+}
+
+.todo-notes {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.quick-dates {
+  gap: 12px;
+  margin-top: 6px;
+}
+
+a.tag {
+  text-decoration: none;
+}
+
+a.tag:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.book-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.book-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+
+.book-list li:first-child {
+  border-top: none;
+}
+
+.book-main strong {
+  font-size: 13.5px;
+}
+
+.book-main .muted {
+  font-family: var(--font-data);
+  font-size: var(--fs-small);
+}
+
+.stars {
+  display: flex;
+  gap: 3px;
+}
+
+.star {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface-alt);
+  color: var(--muted);
+  font-family: var(--font-data);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.star.on {
+  border-color: var(--brass);
+  background: var(--brass-bg);
+  color: var(--brass);
+  font-weight: 600;
+}
+
+.cost-split {
+  margin: var(--space-4) 0;
+}
+
+.cost-split dd {
+  font-size: var(--fs-small);
+}
+
+.cost-add {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.field textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.tx-list.cost-list li {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+a.link-btn {
+  text-decoration: none;
+}

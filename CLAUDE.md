@@ -23,10 +23,11 @@ Module metadata (name, summary, "Done when", `ready` flag) lives in `src/modules
 4. **Life admin**: to-dos with deadlines, a reading list, trip planning with checklists and budgets. Done when: it replaces the current notes app for these.
 5. **Smart layer**: a weekly AI review that summarises the week, spots patterns across modules, and suggests next week's focus.
 
-Current status: Phases 1 (habits and goals), 2 (training hub) and 3 (money) are built and awaiting their "Done when" checks. Phases 4 and 5 are placeholders.
+Current status: Phases 1 (habits and goals), 2 (training hub), 3 (money) and 4 (life admin) are built and awaiting their "Done when" checks. Phase 5 is a placeholder.
 Phase 1 lives in `src/pages/habits/`, `src/hooks/`, `src/lib/streak.ts` and `supabase/migrations/20261005120000_habits_and_goals.sql`.
 Phase 2 lives in `src/pages/training/`, `src/hooks/useTraining.ts`, `src/lib/training.ts` and `supabase/migrations/20261005180000_training_hub.sql`. There is no swim platform yet, so swims are logged by hand; `training_swim_sessions.source` and `external_id` let the platform feed the same table later.
 Phase 3 lives in `src/pages/money/`, `src/hooks/useMoney.ts`, `src/lib/money.ts`, `src/lib/csv.ts` and `supabase/migrations/20261005200000_money.sql`. The importer reads any bank's CSV: each `money_accounts.csv_format` remembers which columns hold the date, description and amount, and `import_key` stops re-imports duplicating rows. Amounts are euro, negative for money out.
+Phase 4 lives in `src/pages/admin/`, `src/hooks/useAdmin.ts`, `src/lib/admin.ts` and `supabase/migrations/20261005220000_life_admin.sql`. To-dos can belong to a trip (`admin_todos.trip_id`) and then show on both the main list and the trip page; deleting a trip deletes its checklist, costs and to-dos. Finished to-dos stay listed for a week.
 Migrations are applied to Supabase project `dhpxlmksyctpafcfdpit` ("Samkiller222's Project", shared with other apps, so keep table names module-specific).
 
 ## How we work
