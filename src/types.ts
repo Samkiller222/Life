@@ -52,3 +52,58 @@ export type SwimSession = {
   notes: string
   source: 'manual' | 'platform'
 }
+
+export type CsvFormat = {
+  /** Row index (from 0) of the header row. */
+  headerRow: number
+  dateCol: string
+  /** Joined with spaces to make the description. */
+  descriptionCols: string[]
+  /** One signed amount column, or separate money out and money in columns. */
+  amountMode: 'single' | 'split'
+  amountCol: string
+  outCol: string
+  inCol: string
+  /** For exports that show spending as positive. */
+  flipSign: boolean
+  dateOrder: 'dmy' | 'mdy'
+}
+
+export type Account = {
+  id: string
+  name: string
+  csv_format: Partial<CsvFormat>
+}
+
+export type Category = {
+  id: string
+  name: string
+  kind: 'expense' | 'income' | 'transfer'
+  monthly_budget: number | null
+  position: number
+}
+
+export type Rule = {
+  id: string
+  pattern: string
+  category_id: string
+  position: number
+}
+
+export type Transaction = {
+  id: string
+  account_id: string
+  date: string
+  description: string
+  amount: number
+  category_id: string | null
+  categorised_by: 'rule' | 'manual' | null
+}
+
+export type SavingsGoal = {
+  id: string
+  name: string
+  target_amount: number
+  saved_amount: number
+  target_date: string | null
+}
