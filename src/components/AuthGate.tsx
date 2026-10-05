@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
-import { supabase, supabaseError } from '../lib/supabase'
+import { explainAuthError, supabase, supabaseError } from '../lib/supabase'
 import { Panel } from './Panel'
 
 /** Shows a magic-link sign-in form until there's a Supabase session. */
@@ -45,7 +45,7 @@ export default function AuthGate({ children }: { children: ReactNode }) {
       email,
       options: { emailRedirectTo: window.location.href },
     })
-    if (error) setError(error.message)
+    if (error) setError(explainAuthError(error.message))
     else setSent(true)
   }
 

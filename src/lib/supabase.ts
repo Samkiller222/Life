@@ -19,3 +19,18 @@ function connect(): SupabaseClient | null {
 
 // Null until both env vars are set and valid, so the app still runs before Supabase is set up.
 export const supabase = connect()
+
+/**
+ * Turns Supabase's "Invalid API key" into something actionable. The publishable key is public by
+ * design (it ships in the page), so showing its start is safe and makes typos easy to spot.
+ */
+export function explainAuthError(message: string): string {
+  if (!/invalid api key/i.test(message) || !anonKey) return message
+  const looksRight = anonKey.startsWith('sb_publishable_') || anonKey.startsWith('eyJ')
+  return (
+    `Invalid API key. The app was built with a key starting "${anonKey.slice(0, 18)}…" (${anonKey.length} characters). ` +
+    (looksRight
+      ? 'Re-paste VITE_SUPABASE_ANON_KEY from Supabase, Project Settings, API Keys, then redeploy.'
+      : 'It should start with "sb_publishable_" (all lowercase). Fix the VITE_SUPABASE_ANON_KEY secret, then redeploy.')
+  )
+}
