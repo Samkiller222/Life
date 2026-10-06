@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { STARTER_CATEGORIES, monthOf, monthRange } from '../lib/money'
 import { today } from '../lib/dates'
-import type { Account, Category, CsvFormat, Rule, SavingsGoal, Transaction } from '../types'
+import type { Account, Category, Rule, SavingsGoal, Transaction } from '../types'
 
 // Supabase returns at most 1000 rows per request, so transactions are read in pages.
 const PAGE = 1000
@@ -10,7 +10,7 @@ const PAGE = 1000
 async function fetchSetup() {
   if (!supabase) return { error: '', accounts: [], categories: [], rules: [], goals: [] }
   const [a, c, r, g] = await Promise.all([
-    supabase.from('money_accounts').select('id, name, csv_format').order('created_at'),
+    supabase.from('money_accounts').select('id, name').order('created_at'),
     supabase.from('money_categories').select('id, name, kind, monthly_budget, position').order('position').order('created_at'),
     supabase.from('money_rules').select('id, pattern, category_id, position').order('position').order('created_at'),
     supabase.from('money_savings_goals').select('id, name, target_amount, saved_amount, target_date').order('created_at'),
@@ -44,7 +44,17 @@ async function fetchMonth(month: string) {
   }
 }
 
-export type ImportRow = { date: string; description: string; amount: number; importKey: string; categoryId: string | null }
+export type TransactionInput = {
+  id?: string
+  /** Leave empty to use your first account, created as "Main account" if you have none. */
+  account_id: string
+  date: string
+  description: string
+  /** Negative for money out, positive for money in. */
+  amount: number
+  category_id: string | null
+  categorised_by: Transaction['categorised_by']
+}
 
 export function useMoney() {
   const [accounts, setAccounts] = useState<Account[]>([])
@@ -95,16 +105,10 @@ export function useMoney() {
 
   async function addAccount(name: string): Promise<Account | null> {
     if (!supabase) return null
-    const { data, error } = await supabase.from('money_accounts').insert({ name }).select('id, name, csv_format').single()
+    const { data, error } = await supabase.from('money_accounts').insert({ name }).select('id, name').single()
     fail(error)
     await loadSetup()
     return (data as Account) ?? null
-  }
-
-  async function saveFormat(accountId: string, format: CsvFormat) {
-    if (!supabase) return
-    fail((await supabase.from('money_accounts').update({ csv_format: format }).eq('id', accountId)).error)
-    await loadSetup()
   }
 
   async function removeAccount(id: string) {
@@ -113,35 +117,26 @@ export function useMoney() {
     await Promise.all([loadSetup(), loadMonth()])
   }
 
-  /** Adds the rows, skipping any already imported for this account. Returns how many were new, or null if it failed. */
-  async function importRows(accountId: string, rows: ImportRow[]): Promise<number | null> {
-    if (!supabase) return null
-    let added = 0
-    for (let i = 0; i < rows.length; i += 500) {
-      const chunk = rows.slice(i, i + 500).map((r) => ({
-        account_id: accountId,
-        date: r.date,
-        description: r.description,
-        amount: r.amount,
-        category_id: r.categoryId,
-        categorised_by: r.categoryId ? 'rule' : null,
-        import_key: r.importKey,
-      }))
-      const { data, error } = await supabase
-        .from('money_transactions')
-        .upsert(chunk, { onConflict: 'user_id,account_id,import_key', ignoreDuplicates: true })
-        .select('id')
-      if (!fail(error)) {
-        await loadMonth()
-        return null
-      }
-      added += data?.length ?? 0
-    }
-    await loadMonth()
-    return added
-  }
-
   // Transactions
+
+  /** Adds or updates a transaction; returns false if it failed. Moves the month view to the transaction's month. */
+  async function saveTransaction(input: TransactionInput) {
+    if (!supabase) return false
+    const { id, ...fields } = input
+    if (!fields.account_id) {
+      const account = accounts[0] ?? (await addAccount('Main account'))
+      if (!account) return false
+      fields.account_id = account.id
+    }
+    const { error } = id
+      ? await supabase.from('money_transactions').update(fields).eq('id', id)
+      : await supabase.from('money_transactions').insert(fields)
+    if (!fail(error)) return false
+    const target = monthOf(fields.date)
+    if (target === month) await loadMonth()
+    else setMonth(target)
+    return true
+  }
 
   async function setCategory(id: string, categoryId: string | null) {
     if (!supabase) return
@@ -265,9 +260,8 @@ export function useMoney() {
     loading,
     error,
     addAccount,
-    saveFormat,
     removeAccount,
-    importRows,
+    saveTransaction,
     setCategory,
     removeTransaction,
     addCategory,

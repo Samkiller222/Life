@@ -39,7 +39,7 @@ export default function Overview() {
         )}
         {transactions.length === 0 ? (
           <EmptyState>
-            Spending by category for {monthLabel(month)} will appear here once you <Link to="/money/import">import a bank CSV</Link>.
+            Spending by category for {monthLabel(month)} will appear here once you <Link to="/money/add">add what you spend</Link>.
           </EmptyState>
         ) : lines.length === 0 ? (
           <EmptyState>

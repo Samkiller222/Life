@@ -14,7 +14,7 @@ import LogSwim from './pages/training/LogSwim'
 import History from './pages/training/History'
 import MoneyLayout from './pages/money/MoneyLayout'
 import Overview from './pages/money/Overview'
-import Import from './pages/money/Import'
+import AddTransaction from './pages/money/AddTransaction'
 import Transactions from './pages/money/Transactions'
 import Budgets from './pages/money/Budgets'
 import Savings from './pages/money/Savings'
@@ -48,7 +48,8 @@ export default function App() {
           </Route>
           <Route path="/money" element={<MoneyLayout />}>
             <Route index element={<Overview />} />
-            <Route path="import" element={<Import />} />
+            <Route path="add" element={<AddTransaction />} />
+            <Route path="add/:id" element={<AddTransaction />} />
             <Route path="transactions" element={<Transactions />} />
             <Route path="budgets" element={<Budgets />} />
             <Route path="savings" element={<Savings />} />

@@ -9,7 +9,7 @@ import type { Category, Transaction } from '../../types'
 
 const dayLabel = (d: string) => parseISODate(d).toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' })
 
-function CategorySelect({ value, categories, onChange, id }: { value: string; categories: Category[]; onChange: (v: string) => void; id?: string }) {
+export function CategorySelect({ value, categories, onChange, id }: { value: string; categories: Category[]; onChange: (v: string) => void; id?: string }) {
   return (
     <select id={id} className="input" value={value} onChange={(e) => onChange(e.target.value)} aria-label={id ? undefined : 'Category'}>
       <option value="">No category</option>
@@ -137,7 +137,7 @@ export default function Transactions() {
         {offer && <RuleOffer key={offer.tx.id + offer.categoryId} tx={offer.tx} categoryId={offer.categoryId} onDone={() => setOffer(null)} />}
         {transactions.length === 0 ? (
           <EmptyState>
-            Transactions for {monthLabel(month)} will be listed here after you <Link to="/money/import">import a bank CSV</Link>.
+            Transactions for {monthLabel(month)} will be listed here once you <Link to="/money/add">add one</Link>.
           </EmptyState>
         ) : shown.length === 0 ? (
           <EmptyState>No transactions this month match the filter.</EmptyState>
@@ -146,7 +146,9 @@ export default function Transactions() {
             {shown.map((t) => (
               <li key={t.id}>
                 <div className="tx-main">
-                  <span className="tx-desc">{t.description || 'No description'}</span>
+                  <Link to={`/money/add/${t.id}`} className="tx-desc">
+                    {t.description || 'No description'}
+                  </Link>
                   <span className="muted">
                     {dayLabel(t.date)}
                     {accounts.length > 1 ? ` · ${accountName.get(t.account_id) ?? ''}` : ''}

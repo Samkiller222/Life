@@ -193,23 +193,29 @@ function Rules() {
 }
 
 function Accounts() {
-  const { accounts, removeAccount } = useMoneyContext()
+  const { accounts, addAccount, removeAccount } = useMoneyContext()
+  const [name, setName] = useState('')
+
+  async function submit(e: FormEvent) {
+    e.preventDefault()
+    if (!name.trim()) return
+    if (await addAccount(name.trim())) setName('')
+  }
+
   return (
     <Panel title="Accounts">
+      <p className="muted">Optional. With more than one account, the add form asks which one each transaction came from.</p>
       {accounts.length === 0 ? (
-        <EmptyState>Accounts appear here once you name one on the import page.</EmptyState>
+        <EmptyState>Your accounts will be listed here. One called Main account is made for you when you add your first transaction.</EmptyState>
       ) : (
         <ul className="session-list">
           {accounts.map((a) => (
             <li key={a.id} className="row" style={{ justifyContent: 'space-between' }}>
-              <span>
-                <strong>{a.name}</strong>
-                <span className="muted"> · {a.csv_format.dateCol ? 'CSV layout saved' : 'No CSV layout yet'}</span>
-              </span>
+              <strong>{a.name}</strong>
               <button
                 type="button"
                 className="link-btn danger"
-                onClick={() => confirm(`Delete "${a.name}" and every transaction imported into it?`) && removeAccount(a.id)}
+                onClick={() => confirm(`Delete "${a.name}" and every transaction in it?`) && removeAccount(a.id)}
               >
                 Delete
               </button>
@@ -217,6 +223,12 @@ function Accounts() {
           ))}
         </ul>
       )}
+      <form className="row" style={{ marginTop: 12 }} onSubmit={submit}>
+        <input className="input prose" style={{ flex: '1 1 180px', width: 'auto' }} placeholder="Revolut" value={name} onChange={(e) => setName(e.target.value)} aria-label="New account name" />
+        <button type="submit" className="btn sm" disabled={!name.trim()}>
+          Add account
+        </button>
+      </form>
     </Panel>
   )
 }

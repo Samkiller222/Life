@@ -29,8 +29,8 @@ export const modules: Module[] = [
   {
     path: '/money',
     name: 'Money',
-    summary: 'Import bank CSVs, auto-categorise spending with your rules, budgets and savings goals.',
-    doneWhen: 'A month of real transactions imports and categorises correctly.',
+    summary: 'Log what you spend and earn, auto-categorised by your rules, with monthly budgets and savings goals.',
+    doneWhen: 'A month of real spending is logged and categorised correctly.',
     built: true,
     ready: false,
   },
