@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useMoneyContext } from './context'
-import { formatMoney } from '../../lib/money'
+import { formatMoney, parseAmountInput } from '../../lib/money'
 import { daysBetween, parseISODate, today } from '../../lib/dates'
 import { EmptyState, Panel } from '../../components/Panel'
 import type { SavingsGoal } from '../../types'
@@ -24,20 +24,93 @@ function perMonth(goal: SavingsGoal): number | null {
   return months > 0 ? left / months : null
 }
 
+/** Saved so far can be 0; anything typed must be a valid amount. */
+const parseSaved = (s: string) => (s.trim() === '' || Number(s.replace(',', '.')) === 0 ? 0 : parseAmountInput(s))
+
+function EditGoal({ goal, onDone }: { goal: SavingsGoal; onDone: () => void }) {
+  const { updateGoal } = useMoneyContext()
+  const [name, setName] = useState(goal.name)
+  const [target, setTarget] = useState(String(goal.target_amount))
+  const [saved, setSaved] = useState(String(goal.saved_amount))
+  const [date, setDate] = useState(goal.target_date ?? '')
+  const [saving, setSaving] = useState(false)
+  const targetValue = parseAmountInput(target)
+  const savedValue = parseSaved(saved)
+  const valid = !!name.trim() && targetValue !== null && savedValue !== null
+
+  async function submit(e: FormEvent) {
+    e.preventDefault()
+    if (!valid) return
+    setSaving(true)
+    const ok = await updateGoal(goal.id, { name: name.trim(), target_amount: targetValue, saved_amount: savedValue, target_date: date || null })
+    setSaving(false)
+    if (ok) onDone()
+  }
+
+  return (
+    <Panel title="Edit savings goal">
+      <form onSubmit={submit}>
+        <div className="fields-grid">
+          <div className="field prose full">
+            <label className="field-label" htmlFor={`sg-name-${goal.id}`}>
+              Saving for
+            </label>
+            <input id={`sg-name-${goal.id}`} value={name} onChange={(e) => setName(e.target.value)} />
+          </div>
+          <div className="field">
+            <label className="field-label" htmlFor={`sg-target-${goal.id}`}>
+              Target (€)
+            </label>
+            <input id={`sg-target-${goal.id}`} type="text" inputMode="decimal" value={target} onChange={(e) => setTarget(e.target.value)} />
+          </div>
+          <div className="field">
+            <label className="field-label" htmlFor={`sg-saved-${goal.id}`}>
+              Saved so far (€)
+            </label>
+            <input id={`sg-saved-${goal.id}`} type="text" inputMode="decimal" value={saved} onChange={(e) => setSaved(e.target.value)} />
+          </div>
+          <div className="field full">
+            <label className="field-label" htmlFor={`sg-date-${goal.id}`}>
+              Target date
+            </label>
+            <input id={`sg-date-${goal.id}`} type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+          </div>
+        </div>
+        <div className="actions">
+          <button type="submit" className="btn stamp" disabled={!valid || saving}>
+            {saving ? 'Saving…' : 'Save changes'}
+          </button>
+          <button type="button" className="btn secondary" onClick={onDone}>
+            Cancel
+          </button>
+          {date && (
+            <button type="button" className="link-btn" onClick={() => setDate('')}>
+              Remove date
+            </button>
+          )}
+        </div>
+      </form>
+    </Panel>
+  )
+}
+
 function GoalPanel({ goal }: { goal: SavingsGoal }) {
   const { addSaved, removeGoal } = useMoneyContext()
   const [value, setValue] = useState('')
+  const [editing, setEditing] = useState(false)
   const pct = Math.min(100, Math.round((goal.saved_amount / goal.target_amount) * 100))
   const overdue = goal.target_date && pct < 100 && daysBetween(today(), goal.target_date) < 0
   const monthly = perMonth(goal)
 
   async function submit(e: { preventDefault(): void }, sign: 1 | -1) {
     e.preventDefault()
-    const n = Number(value)
-    if (!value || !(n > 0)) return
+    const n = parseAmountInput(value)
+    if (n === null) return
     await addSaved(goal, sign * n)
     setValue('')
   }
+
+  if (editing) return <EditGoal goal={goal} onDone={() => setEditing(false)} />
 
   return (
     <Panel title={goal.name} meta={<span className={pct >= 100 ? 'badge ok' : overdue ? 'badge err' : 'badge'}>{pct >= 100 ? 'Reached' : overdue ? 'Overdue' : `${pct}%`}</span>}>
@@ -52,12 +125,15 @@ function GoalPanel({ goal }: { goal: SavingsGoal }) {
       </div>
       {monthly !== null && !overdue && <p className="hint">{formatMoney(monthly)} a month gets you there on time.</p>}
       <form className="actions" onSubmit={(e) => submit(e, 1)}>
-        <input className="input" style={{ flex: '1 1 120px', width: 'auto' }} type="number" min="0" step="0.01" inputMode="decimal" placeholder="Amount" value={value} onChange={(e) => setValue(e.target.value)} aria-label="Amount" />
+        <input className="input" style={{ flex: '1 1 120px', width: 'auto' }} type="text" inputMode="decimal" placeholder="Amount" value={value} onChange={(e) => setValue(e.target.value)} aria-label="Amount" />
         <button type="submit" className="btn sm">
           Add saved
         </button>
         <button type="button" className="btn secondary sm" onClick={(e) => submit(e, -1)}>
           Take out
+        </button>
+        <button type="button" className="link-btn" onClick={() => setEditing(true)}>
+          Edit
         </button>
         <button type="button" className="link-btn danger" onClick={() => confirm(`Delete "${goal.name}"?`) && removeGoal(goal.id)}>
           Delete
@@ -73,12 +149,14 @@ export default function Savings() {
   const [target, setTarget] = useState('')
   const [saved, setSaved] = useState('')
   const [date, setDate] = useState('')
-  const valid = !!name.trim() && Number(target) > 0
+  const targetValue = parseAmountInput(target)
+  const savedValue = parseSaved(saved)
+  const valid = !!name.trim() && targetValue !== null && savedValue !== null
 
   async function submit(e: FormEvent) {
     e.preventDefault()
     if (!valid) return
-    const ok = await addGoal({ name: name.trim(), target_amount: Number(target), saved_amount: Number(saved) > 0 ? Number(saved) : 0, target_date: date || null })
+    const ok = await addGoal({ name: name.trim(), target_amount: targetValue, saved_amount: savedValue, target_date: date || null })
     if (ok) {
       setName('')
       setTarget('')
@@ -102,13 +180,13 @@ export default function Savings() {
               <label className="field-label" htmlFor="sg-target">
                 Target
               </label>
-              <input id="sg-target" type="number" min="0" step="0.01" inputMode="decimal" placeholder="3000" value={target} onChange={(e) => setTarget(e.target.value)} />
+              <input id="sg-target" type="text" inputMode="decimal" placeholder="3000" value={target} onChange={(e) => setTarget(e.target.value)} />
             </div>
             <div className="field">
               <label className="field-label" htmlFor="sg-saved">
                 Already saved
               </label>
-              <input id="sg-saved" type="number" min="0" step="0.01" inputMode="decimal" placeholder="0" value={saved} onChange={(e) => setSaved(e.target.value)} />
+              <input id="sg-saved" type="text" inputMode="decimal" placeholder="0" value={saved} onChange={(e) => setSaved(e.target.value)} />
             </div>
             <div className="field full">
               <label className="field-label" htmlFor="sg-date">
