@@ -5,7 +5,7 @@ import { Panel } from '../components/Panel'
 
 function statusBadge(built: boolean, ready: boolean) {
   if (ready) return <span className="badge ok">Done</span>
-  if (built) return <span className="badge accent">Testing</span>
+  if (built) return null
   return <span className="badge">Not built</span>
 }
 
