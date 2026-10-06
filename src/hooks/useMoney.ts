@@ -243,6 +243,14 @@ export function useMoney() {
     await loadSetup()
   }
 
+  /** Saves edits to a goal; returns false if it failed. */
+  async function updateGoal(id: string, patch: Pick<SavingsGoal, 'name' | 'target_amount' | 'saved_amount' | 'target_date'>) {
+    if (!supabase) return false
+    const ok = fail((await supabase.from('money_savings_goals').update(patch).eq('id', id)).error)
+    await loadSetup()
+    return ok
+  }
+
   async function removeGoal(id: string) {
     if (!supabase) return
     fail((await supabase.from('money_savings_goals').delete().eq('id', id)).error)
@@ -274,6 +282,7 @@ export function useMoney() {
     moveRule,
     addGoal,
     addSaved,
+    updateGoal,
     removeGoal,
   }
 }
