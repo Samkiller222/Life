@@ -20,7 +20,7 @@ export default function MoneyLayout() {
           <NavLink to="/money" end>
             Overview
           </NavLink>
-          <NavLink to="/money/import">Import</NavLink>
+          <NavLink to="/money/add">Add</NavLink>
           <NavLink to="/money/transactions">Transactions</NavLink>
           <NavLink to="/money/budgets">Budgets and rules</NavLink>
           <NavLink to="/money/savings">Savings</NavLink>

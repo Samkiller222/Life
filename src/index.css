@@ -1007,6 +1007,8 @@ input[type='checkbox'] {
 }
 
 .tx-desc {
+  color: var(--text);
+  text-decoration: none;
   font-size: 13px;
   font-weight: 600;
   overflow-wrap: anywhere;
@@ -1235,4 +1237,42 @@ a.link-btn {
 
 .review-list .link-btn[aria-current='true'] {
   font-weight: 600;
+}
+
+.tx-desc:hover {
+  color: var(--accent);
+}
+
+.segmented {
+  display: inline-flex;
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.segmented button {
+  padding: 8px 18px;
+  border: none;
+  background: var(--surface-alt);
+  color: var(--muted);
+  font-family: var(--font-data);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+  cursor: pointer;
+}
+
+.segmented button + button {
+  border-left: 1px solid var(--border);
+}
+
+.segmented button.on {
+  background: var(--accent);
+  color: #fff;
+}
+
+.segmented button:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
